@@ -1,6 +1,6 @@
-# Toast
+# Toast - Development Branch v1.0
 
-A modern WordPress theme to complete your balanced breakfast.
+A modern WordPress theme to complete your balanced breakfast. https://rekenna.github.io/toast/
 
 Dependencies: Yarn/NPM, Bower, Composer, a WordPress install.
 
