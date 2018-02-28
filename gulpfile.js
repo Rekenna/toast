@@ -10,8 +10,6 @@ var notify = require('gulp-notify');
 var imagemin = require('gulp-imagemin');
 var sourcemaps = require('gulp-sourcemaps');
 var del = require('del')
-var wiredep = require('wiredep').stream
-var mainBowerFiles = require('main-bower-files')
 var livereload = require('gulp-livereload')
 var util = require('gulp-util')
 var size = require('gulp-size')
@@ -94,31 +92,6 @@ gulp.task('images:watch', function () {
 });
 
 //
-// Wiredep
-//
-gulp.task('wiredep', function () {
-	// Inject SASS
-  gulp.src('./src/styles/*.scss')
-		.pipe(plumber({errorHandler: errorAlert}))
-    .pipe(wiredep({
-			directory: 'bower_components',
-      ignorePath: /^(\.\.\/)+/
-    }))
-		.pipe(gulp.dest('./src/styles'));
-
-	gulp.src(mainBowerFiles('**/*.css'))
-    .pipe(plumber({errorHandler: errorAlert}))
-    .pipe(concat('vendor.css'))
-    .pipe(gulp.dest('dist/css'));
-
-	// Vendor.js
-	gulp.src(mainBowerFiles('**/*.js'))
-		.pipe(plumber({errorHandler: errorAlert}))
-		.pipe(concat('vendor.js'))
-		.pipe(gulp.dest('dist/js/'));
-});
-
-//
 // Clean
 //
 gulp.task('clean', del.bind(null, ['dist', 'build', '*.zip']));
@@ -142,7 +115,7 @@ gulp.task('zip', ['build'], () => {
 //
 // Watch
 //
-gulp.task('watch', ['js', 'sass', 'twig', 'wiredep', 'images'],function () {
+gulp.task('watch', ['js', 'sass', 'twig', 'images'],function () {
   gulp.watch('./src/scripts/**/*.js', ['js']);
   gulp.watch('./src/styles/**/*.scss', ['sass']);
   gulp.watch('./src/views/**/*', ['twig']);

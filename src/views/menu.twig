@@ -1,10 +1,12 @@
 {% if menu %}
-	<ul>
+<div class="pure-menu pure-menu-horizontal">
+	<ul class="pure-menu-list">
 	{% for item in menu %}
-		<li class="{{ item.classes | join(' ') }}">
-			<a target="{{ item.target }}" href="{{ item.link }}">{{ item.title }}</a>
+		<li class="{{ item.classes | join(' ') }} pure-menu-item">
+			<a target="{{ item.target }}" href="{{ item.link }}" class="pure-menu-link">{{ item.title }}</a>
 			{% include "menu.twig" with {'menu': item.get_children} %}
 		</li>
 	{% endfor %}
 	</ul>
+</div>
 {% endif %}

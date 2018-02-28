@@ -2,8 +2,9 @@
 
 {% block content %}
 	<h2 class="h2"><a href="{{post.link}}">{{post.title}}</a></h2>
-		<p>{{post.preview.length(25)}}</p>
+		<p>{{post.preview.length(25).read_more('').end('')}}</p>
 		{% if post.thumbnail.src %}
 			<img src="{{post.thumbnail.src}}" />
 		{% endif %}
+		<a class="pure-button pure-button-primary" href="{{post.link}}">Read More</a>
 {% endblock %}
