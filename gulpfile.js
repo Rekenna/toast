@@ -103,6 +103,7 @@ gulp.task('build', ['js', 'sass', 'twig', 'images'], function() {
   gulp.src('dist/**/*').pipe(size({title: 'build', gzip: true}));
 	gulp.src(['dist/**/*']).pipe(gulp.dest('build/dist'));
 	gulp.src('vendor/**/*').pipe(gulp.dest('build/vendor'));
+	gulp.src('lib/**/*').pipe(gulp.dest('build/lib'));
 	gulp.src('./*.{png,gif,jpg,php,css}').pipe(gulp.dest('build'));
 });
 

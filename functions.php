@@ -3,6 +3,9 @@
 // Composer plugins
 require 'vendor/autoload.php';
 
+// Include Library
+require_once("lib/lib.php");
+
 if ( ! class_exists( 'Timber' ) ) {
 	add_action( 'admin_notices', function() {
 			echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url( admin_url( 'plugins.php#timber' ) ) . '">' . esc_url( admin_url( 'plugins.php' ) ) . '</a></p></div>';
@@ -15,23 +18,7 @@ if ( ! class_exists( 'Timber' ) ) {
 	return;
 }
 
-/**
- * Scripts and stylesheets
- */
-function toast_scripts() {
-	$assets = array(
-		'vendor-css'	=> '/dist/css/vendor.css',
-		'css'					=> '/dist/css/styles.css',
-		'vendor-js'		=> '/dist/js/vendor.js',
-		'js'					=> '/dist/js/main.js'
-	);
-	wp_enqueue_style('toast-vendor-css', get_template_directory_uri() . $assets['vendor-css'], false, null);
-	wp_enqueue_style('toast-css', get_template_directory_uri() . $assets['css'], false, null);
-	wp_enqueue_script('toast-vendor-js', get_template_directory_uri() . $assets['vendor-js'], array(), null, true);
-	wp_enqueue_script('toast-js', get_template_directory_uri() . $assets['js'], array(), null, true);
-}
-add_action('wp_enqueue_scripts', 'toast_scripts', 100);
-
+// Set Views Directory for Timber
 Timber::$dirname = array('dist/views');
 
 class ToastSite extends TimberSite {
