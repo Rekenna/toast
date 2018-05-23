@@ -9,6 +9,6 @@ function toast_scripts() {
 		'js'					=> '/dist/js/main.js'
 	);
 	wp_enqueue_style('toast-css', get_template_directory_uri() . $assets['css'], false, null);
-	wp_enqueue_script('toast-js', get_template_directory_uri() . $assets['js'], array(), null, true);
+	wp_enqueue_script('toast-js', get_template_directory_uri() . $assets['js'], array('jQuery'), null, true);
 }
 add_action('wp_enqueue_scripts', 'toast_scripts', 100);

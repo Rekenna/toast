@@ -1,4 +1,4 @@
-# Toast - Development Branch v1.1.0
+# Toast - Development Branch v1.1.2
 
 A modern WordPress theme to complete your balanced breakfast. https://rekenna.github.io/toast/
 

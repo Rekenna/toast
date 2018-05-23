@@ -28,7 +28,7 @@
               Comments
             </h3>
             {% for cmt in post.comments %}
-              {% include "comment.twig" with {
+              {% include "partial/comment.twig" with {
                 comment : cmt
               } %}
             {% endfor %}

@@ -45,11 +45,12 @@ gulp.task('sass:watch', function () {
 // Scripts
 //
 gulp.task('js', function () {
-  return gulp.src('src/scripts/**/*.js')
+  return gulp.src(['src/scripts/includes/**/*.js', 'src/scripts/*.js'])
     .pipe(plumber({errorHandler: errorAlert}))
     .pipe(babel({
         presets: ['env']
     }))
+		.pipe(concat('main.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./dist/js'));
 });
@@ -57,7 +58,6 @@ gulp.task('js', function () {
 gulp.task('js:watch', function () {
   gulp.watch('./src/scripts/**/*.js', ['js']);
 });
-
 //
 // Twig
 //

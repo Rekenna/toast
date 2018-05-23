@@ -8,12 +8,12 @@
 			<h4> Replies </h4>
 			<div class="comments">
 				{% for cmt in comment.children %}
-					{% include "comment.twig" with {comment:cmt} %}
+					{% include "partial/comment.twig" with {comment:cmt} %}
 				{% endfor %}
 			</div>
 		{% endif %}
 
 		<!-- comment form -->
-		{% include "comment-form.twig" %}
+		{% include "partial/comment-form.twig" %}
 	</section>
 </div>

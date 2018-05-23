@@ -7,3 +7,4 @@ build/
 *.zip
 template/
 vendor/
+*.log
