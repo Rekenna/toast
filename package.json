@@ -28,6 +28,6 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "gulp-zip": "^4.0.0",
-    "purecss": "^1.0.0"
+    "semantic-ui-css": "^2.3.3"
   }
 }
