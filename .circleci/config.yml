@@ -14,7 +14,7 @@ workflows:
             only: master2
 docs-build:
   docker:
-    - image: python:3.7
+    - image: node:8.10.0
   steps:
     - checkout
     - run:
