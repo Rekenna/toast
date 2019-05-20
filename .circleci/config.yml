@@ -22,7 +22,7 @@ jobs:
           at: ./
       - run:
           name: Install Dependencies
-          command: npm install -g vuepress gh-pages
+          command: sudo npm install -g vuepress gh-pages
       - run:
           name: Build Site
           command: npm run docs:build
