@@ -27,7 +27,7 @@ jobs:
             - v1-dependencies-
       - run:
           name: Install VuePress
-          command: npm install vuepress && npm install -g --silent gh-pages
+          command: npm install -g vuepress gh-pages
       - run:
           name: Build Site
           command: npm run docs:build
