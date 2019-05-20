@@ -4,12 +4,9 @@ module.exports = {
   base: "/toast/",
   description:
     "A development focused WordPress starter theme to complete your balanced breakfast.",
-  base: "/horizon/",
   themeConfig: {
-    logo: "/upload/horizon-logo.png",
     nav: [
       { text: "Home", link: "/" },
-      { text: "About", link: "/about.html" },
       { text: "Getting Started", link: "/getting-started.html" }
     ],
     // Assumes GitHub. Can also be a full GitLab url.
