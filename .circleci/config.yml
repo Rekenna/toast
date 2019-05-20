@@ -26,8 +26,8 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
       - run:
-          name: Install Dependencies
-          command: npm install vuepress && npm install gh-pages
+          name: Install VuePress
+          command: npm install vuepress && npm install -g --silent gh-pages
       - run:
           name: Build Site
           command: npm run docs:build
