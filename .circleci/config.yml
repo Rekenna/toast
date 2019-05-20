@@ -22,7 +22,11 @@ jobs:
           at: ./
       - run:
           name: Install Dependencies
-          command: sudo npm install -g vuepress gh-pages
+          command: |
+            sudo npm install -g vuepress gh-pages
+      - add_ssh_keys:
+          fingerprints:
+            - "09:d7:03:bd:06:f8:91:b9:d4:5d:4f:7a:ad:37:17:67"
       - run:
           name: Build Site
           command: npm run docs:build
