@@ -27,7 +27,7 @@ jobs:
             - v1-dependencies-
       - run:
           name: Install Dependencies
-          command: npm install --only=dev
+          command: npm install vuepress
       - run:
           name: Build Site
           command: npm run docs:build
