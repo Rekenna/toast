@@ -4,4 +4,4 @@ home: true
 
 # Toast Docs
 
-neat
+Really neat
