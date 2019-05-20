@@ -1,10 +1,8 @@
-<header id="site-header" class="header">
-  <div class="wrapper">
-    <h1 class="hdr-logo" role="banner">
-      <a class="hdr-logo-link" href="{{site.url}}" rel="home">{{site.name}}</a>
-    </h1>
-    <nav id="nav-main" class="nav-main" role="navigation">
-      {% include "partial/menu.twig" with {'menu': menu.get_items} %}
-    </nav><!-- #nav -->
+<header id="site-header" class="ui menu fixed">
+  <div class="ui container">
+    <div class="header item" role="banner">
+      <a class="site-logo" href="{{site.url}}" rel="home">{{site.name}}</a>
+    </div>
+    {% include "partial/menu.twig" with {'menu': menu.get_items} %}
   </div>
 </header>

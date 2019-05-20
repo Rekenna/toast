@@ -1,12 +1,7 @@
 {% if menu %}
-<div class="pure-menu pure-menu-horizontal">
-	<ul class="pure-menu-list">
+	<nav class="right menu">
 	{% for item in menu %}
-		<li class="{{ item.classes | join(' ') }} pure-menu-item">
-			<a target="{{ item.target }}" href="{{ item.link }}" class="pure-menu-link">{{ item.title }}</a>
-			{% include "partial/menu.twig" with {'menu': item.get_children} %}
-		</li>
+		<a target="{{ item.target }}" href="{{ item.link }}" class="item">{{ item.title }}</a>
 	{% endfor %}
-	</ul>
-</div>
+	</nav>
 {% endif %}

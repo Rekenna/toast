@@ -1,40 +1,36 @@
-<div class="comment-form">
-  <h3>
+<div id="comment-form" class="comment-form">
+  <h3 class="ui header">
     Add comment
   </h3>
-
-  <form id="form" class="comment-form pure-form" method="post" action="{{ site.url~'/wp-comments-post.php' }}">
-    <fieldset>
-
-      {% if user %}
-        <input type="hidden" name="email" value="{{ user.email }}">
-        <input type="hidden" name="author" value="{{ user.name }}">
-        <input type="hidden" name="url" value="{{ user.link }}">
-      {% else %}
-        <label for="email">Email
-        </label>
+  <form id="form" class="ui form" method="post" action="{{ site.url~'/wp-comments-post.php' }}">
+    {% if user %}
+      <input type="hidden" name="email" value="{{ user.email }}">
+      <input type="hidden" name="author" value="{{ user.name }}">
+      <input type="hidden" name="url" value="{{ user.link }}">
+    {% else %}
+      <div class="field">
+        <label for="email">Email</label>
         <input required="required" name="email" type="text" id="email"/>
+      </div>
+      <div class="field">
+          <label for="author">Username</label>
+          <input required="required" name="author" type="text" id="author"/>
+      </div>
 
-        <label for="author">Username
-        </label>
-        <input required="required" name="author" type="text" id="author"/>
-
-        <label for="url">Url
-        </label>
+      <div class="field">
+        <label for="url">Url</label>
         <input name="url" id="url" type="text"/>
-
-      {% endif %}
-
+      </div>
+    {% endif %}
+    <div class="field">
       <textarea placeholder="Comment...." name="comment" cols="60" rows="3" id="comment"></textarea>
-      <input name="comment_post_ID" value="{{ post.id }}" id="comment_post_ID" type="hidden">
-      <input name="comment_parent" id="comment_parent" value="{{ comment.ID|default('0') }}" type="hidden">
+    </div>
+    <input name="comment_post_ID" value="{{ post.id }}" id="comment_post_ID" type="hidden">
+    <input name="comment_parent" id="comment_parent" value="{{ comment.ID|default('0') }}" type="hidden">
 
-    </fieldset>
-    <fieldset>
-      <button type="submit" name="Submit" class="pure-button pure-button-primary">Submit</button>
-      <button type="reset" class="pure-button">Cancel</button>
-      <p>Your comment will be revised by the site if needed.</p>
-    </fieldset>
+    <div class="field">
+      <button type="submit" name="Submit" class="ui button primary">Submit</button>
+    </div>
   </div>
 </form>
 </div>

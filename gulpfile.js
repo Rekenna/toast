@@ -1,135 +1,152 @@
-'use strict';
+const { src, dest, parallel, series, watch } = require("gulp");
+const concat = require("gulp-concat");
+const sass = require("gulp-sass");
+const sassGlob = require("gulp-sass-glob");
+const babel = require("gulp-babel");
+const plumber = require("gulp-plumber");
+const notify = require("gulp-notify");
+const zip = require("gulp-zip");
+const size = require("gulp-size");
+const imagemin = require("gulp-imagemin");
+const clean = require("gulp-clean");
+const browserSync = require("browser-sync").create();
+const config = require("./config.js");
 
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var babel = require('gulp-babel');
-var uglify = require('gulp-uglify');
-var plumber = require('gulp-plumber');
-var concat = require('gulp-concat');
-var notify = require('gulp-notify');
-var imagemin = require('gulp-imagemin');
-var sourcemaps = require('gulp-sourcemaps');
-var del = require('del')
-var livereload = require('gulp-livereload')
-var util = require('gulp-util')
-var size = require('gulp-size')
-var zip = require('gulp-zip')
+// Error Handler
+function errorHandler(error) {
+  notify.onError({
+    title: error.title,
+    message: error.code + ": " + error.name,
+    sound: "Sosumi"
+  })(error);
+  // Display full error to console
+  console.log(error);
+  // this.emit(end);
+}
 
-// Error Alerts
-function errorAlert(error){
-	notify.onError({
-		title: "Error compiling file",
-		message: 'Check your terminal.',
-		sound: "Sosumi"
-	})(error); //Error Notification
-	console.log(error);
-	this.emit("end"); //End function
-};
+// JavaScript
+function js() {
+  src("src/js/**/*.js")
+    .pipe(plumber({ errorHandler }))
+    .pipe(
+      babel({
+        presets: ["@babel/env"]
+      })
+    )
+    .pipe(concat("app.min.js"))
+    .pipe(dest("./dist/js", { sourcemaps: true }));
 
-//
+  // We have to do this so live/hot reloading works with Browser Sync
+  browserSync.reload();
+  return Promise.resolve("JS");
+}
+
 // Styles
-//
-gulp.task('sass', function () {
-  return gulp.src('./src/styles/**/*.scss')
-    .pipe(plumber({errorHandler: errorAlert}))
-    .pipe(sourcemaps.init())
-    .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('./dist/css'));
-});
+function css() {
+  src("src/scss/**/*.scss")
+    .pipe(plumber({ errorHandler }))
+    .pipe(sassGlob())
+    .pipe(sass().on("error", sass.logError))
+    .pipe(dest("./dist/css", { sourcemaps: true }))
+    .pipe(browserSync.stream());
 
-gulp.task('sass:watch', function () {
-  gulp.watch('./src/styles/**/*.scss', ['sass']);
-});
+  // We have to do this so live/hot reloading works with Browser Sync
+  // browserSync.reload();
+  return Promise.resolve("CSS");
+}
 
-//
-// Scripts
-//
-gulp.task('js', function () {
-  return gulp.src(['src/scripts/includes/**/*.js', 'src/scripts/*.js'])
-    .pipe(plumber({errorHandler: errorAlert}))
-    .pipe(babel({
-        presets: ['env']
-    }))
-		.pipe(concat('main.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('./dist/js'));
-});
+// Twig Templates
+function twig() {
+  src("src/views/**/*.twig")
+    .pipe(plumber({ errorHandler }))
+    .pipe(dest("./dist/views"));
 
-gulp.task('js:watch', function () {
-  gulp.watch('./src/scripts/**/*.js', ['js']);
-});
-//
-// Twig
-//
-gulp.task('twig', function () {
-  return gulp.src('./src/views/**/*.twig')
-    .pipe(plumber({errorHandler: errorAlert}))
-    .pipe(gulp.dest('./dist/views'));
-});
+  // We have to do this so live/hot reloading works with Browser Sync
+  browserSync.reload();
+  return Promise.resolve("TWIG");
+}
 
-gulp.task('twig:watch', function () {
-  gulp.watch('./src/views/**/*.twig', ['twig']);
-});
+// Image/Asset Handling
+function img() {
+  src("src/img/**/*.{png,svg,jpg,gif}")
+    .pipe(plumber({ errorHandler }))
+    .pipe(
+      imagemin({
+        progressive: true,
+        interlaced: true,
+        // don't remove IDs from SVGs, they are often used
+        // as hooks for embedding and styling
+        svgoPlugins: [{ cleanupIDs: false }]
+      })
+    )
+    .pipe(dest("./dist/img"));
 
-//
-// Images
-//
-gulp.task('images', function () {
-  return gulp.src('./src/images/**/*.{png,svg,jpg,gif}')
-    .pipe(plumber({errorHandler: errorAlert}))
-    .pipe(imagemin({
-      progressive: true,
-      interlaced: true,
-      // don't remove IDs from SVGs, they are often used
-      // as hooks for embedding and styling
-      svgoPlugins: [{cleanupIDs: false}]
-    }))
-    .pipe(gulp.dest('./dist/images'));
-});
+  // We have to do this so live/hot reloading works with Browser Sync
+  browserSync.reload();
+  return Promise.resolve("IMG");
+}
 
-gulp.task('images:watch', function () {
-  gulp.watch('./src/images/**/*.{png,svg,jpg,gif}', ['images']);
-});
+// PHP File Watcher
+// TODO: Add Code Sniffing?
+function php() {
+  // We have to do this so live/hot reloading works with Browser Sync
+  browserSync.reload();
+  return Promise.resolve("PHP");
+}
 
-//
-// Clean
-//
-gulp.task('clean', del.bind(null, ['dist', 'build', '*.zip']));
+// Copy Compiled Files into Build
+function copyDist() {
+  src("./dist/**/*").pipe(dest("./build/dist"));
+  return Promise.resolve("Copied /dist/ into /build/");
+}
 
-//
-// Build & Zip
-//
-gulp.task('build', ['js', 'sass', 'twig', 'images'], function() {
-  gulp.src('dist/**/*').pipe(size({title: 'build', gzip: true}));
-	gulp.src(['dist/**/*']).pipe(gulp.dest('build/dist'));
-	gulp.src('vendor/**/*').pipe(gulp.dest('build/vendor'));
-	gulp.src('lib/**/*').pipe(gulp.dest('build/lib'));
-	gulp.src('./*.{png,gif,jpg,php,css}').pipe(gulp.dest('build'));
-});
+// Build into `./build/`
+function build() {
+  src("vendor/**/*").pipe(dest("build/vendor"));
+  src("lib/**/*").pipe(dest("build/lib"));
+  src("./*.{png,gif,jpg,php,css}").pipe(dest("build"));
+  return Promise.resolve("Created Build");
+}
 
-gulp.task('zip', ['build'], () => {
-	return gulp.src('build/**/*')
-		 .pipe(zip('template.zip'))
-		 .pipe(gulp.dest('./'));
-});
+// Compress into a .zip for Upload if Needed
+function compress() {
+  src("build/*").pipe(zip("template.zip").pipe(dest("./")));
+  return Promise.resolve("Compress Completed");
+}
 
-//
-// Watch
-//
-gulp.task('watch', ['js', 'sass', 'twig', 'images'],function () {
-  gulp.watch('./src/scripts/**/*.js', ['js']);
-  gulp.watch('./src/styles/**/*.scss', ['sass']);
-  gulp.watch('./src/views/**/*', ['twig']);
-  gulp.watch('./src/images/**/*.{png,svg,jpg,gif}', ['images']);
+// Clean working/generated files
+function cleanFiles() {
+  src(["dist", "build", "*.zip"], { read: false, allowEmpty: true }).pipe(
+    clean()
+  );
+  return Promise.resolve("Clean Completed");
+}
 
-	livereload.listen();
-	util.log('Live reload server starting.');
+// Watch for Changes + Live Reload
+function develop() {
+  browserSync.init({
+    proxy: config.proxy
+  });
 
-	gulp.watch('**/*.php').on('change', livereload.changed);
-	gulp.watch('dist/views/**').on('change', livereload.changed);
-	gulp.watch('dist/css/*.css').on('change', livereload.changed);
-	gulp.watch('dist/js/*.js').on('change', livereload.changed);
-	gulp.watch('dist/images/**').on('change', livereload.changed);
-});
+  watch("src/js/**/*.js", js);
+  watch("src/scss/**/*.scss", css);
+  watch("src/views/**/*.twig", twig);
+  watch("src/img/**/*", img);
+  watch(["**/*.php", "!vendor/**/*.*"], php);
+}
 
-gulp.task('default', ['watch']);
+const compile = parallel(css, js, twig, img);
+
+module.exports = {
+  js,
+  css,
+  twig,
+  img,
+  php,
+  compile: compile,
+  watch: series(compile, develop),
+  clean: cleanFiles,
+  copyDist: copyDist,
+  build: series(copyDist, build),
+  zip: compress
+};

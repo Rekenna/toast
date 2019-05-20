@@ -6,7 +6,7 @@
 function toast_scripts() {
 	$assets = array(
 		'css'					=> '/dist/css/styles.css',
-		'js'					=> '/dist/js/main.js'
+		'js'					=> '/dist/js/app.min.js'
 	);
 	wp_enqueue_style('toast-css', get_template_directory_uri() . $assets['css'], false, null);
 	wp_enqueue_script('toast-js', get_template_directory_uri() . $assets['js'], array('jquery'), null, true);

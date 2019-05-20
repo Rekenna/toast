@@ -20,11 +20,11 @@
       </section>
 
       <!-- comment box -->
-      <section class="comment-box">
+      <section id="comment-box">
         <!-- comments -->
         <div class="comments">
           {% if post.comments %}
-            <h3>
+            <h3 class="ui header">
               Comments
             </h3>
             {% for cmt in post.comments %}
