@@ -4,36 +4,28 @@
 #
 version: 2
 jobs:
-  - docs-build
-  - docs-deploy:
-      requires:
-        - docs-build
-      filters:
-        branches:
-          only: master
-docs-build:
-  docker:
-    - image: node:8.10.0
-  steps:
-    - checkout
-    - run:
-        name: Install Dependencies
-        command: npm install vuepress
-    - run:
-        name: Build Docs
-        command: npm run docs:build
-    - persist_to_workspace:
-        root: docs/.vuepress
-        paths: dist
-docs-deploy:
-  docker:
-    - image: node:8.10.0
-  steps:
-    - checkout
-    - run:
-        name: Install and configure dependencies
-        command: |
-          npm install -g --silent gh-pages
-    - run:
-        name: Deploy docs to gh-pages branch
-        command: gh-pages --dist docs/.vuepress/dist
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:latest
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Install Dependencies
+          command: npm install -g vuepress gh-pages
+      - run:
+          name: Build Site
+          command: npm run docs:build
+      - run:
+          name: Deploy docs
+          command: gh-pages --dotfiles --message "[skip ci] Updates" --dist docs/.vuepress/dist
