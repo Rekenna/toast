@@ -5,6 +5,7 @@ module.exports = {
   description:
     "A development focused WordPress starter theme to complete your balanced breakfast.",
   themeConfig: {
+    logo: "/upload/horizontal-logo.png",
     nav: [
       { text: "Home", link: "/" },
       { text: "Getting Started", link: "/getting-started.html" }

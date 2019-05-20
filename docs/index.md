@@ -1,5 +1,6 @@
 ---
 home: true
+heroImage: ./upload/toast-logo.png
 actionText: Get Started →
 actionLink: /getting-started.html
 features:
