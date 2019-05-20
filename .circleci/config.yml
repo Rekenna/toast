@@ -24,6 +24,8 @@ jobs:
           name: Install Dependencies
           command: |
             sudo npm install -g vuepress gh-pages
+            git config user.email "ci-build@ryanpatmckenna.io"
+            git config user.name "ci-build"
       - add_ssh_keys:
           fingerprints:
             - "09:d7:03:bd:06:f8:91:b9:d4:5d:4f:7a:ad:37:17:67"
