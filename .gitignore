@@ -9,3 +9,4 @@ template/
 vendor/
 *.log
 yarn.lock
+.DS_Store
