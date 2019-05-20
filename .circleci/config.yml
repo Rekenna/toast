@@ -30,7 +30,7 @@ jobs:
           command: npm install --only=dev
       - run:
           name: Build Site
-          commane: npm run docs:build
+          command: npm run docs:build
       - run:
           name: Deploy docs to gh-pages branch
           command: gh-pages --dist docs/.vuepress/dist
