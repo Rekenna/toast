@@ -2,16 +2,15 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-workflows:
-  version: 2
-  jobs:
-    - docs-build
-    - docs-deploy:
-        requires:
-          - docs-build
-        filters:
-          branches:
-            only: master2
+version: 2
+jobs:
+  - docs-build
+  - docs-deploy:
+      requires:
+        - docs-build
+      filters:
+        branches:
+          only: master
 docs-build:
   docker:
     - image: node:8.10.0
